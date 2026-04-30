@@ -1,12 +1,14 @@
 [project]
-name = "ai-buildcamp-project"
+name = "news-event-reminder-bot"
 version = "0.1.0"
-description = "My AI Engineering Buildcamp project"
+description = "Telegram bot that extracts future-dated events from news articles, schedules reminders, and re-verifies events before they fire"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "jupyter>=1.0.0",
+    "jupyterlab>=4.5.6",
     "minsearch>=0.0.5",
+    "notebook>=7.5.5",
     "openai>=1.50.0",
     "python-dotenv>=1.0.0",
 ]

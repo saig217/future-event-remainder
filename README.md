@@ -1,14 +1,23 @@
-# Your Project Name
+# News Event Reminder Bot
 
-A starter template for the AI Engineering Buildcamp capstone. Replace this README with a description of your own project.
+A Telegram bot that extracts future-dated events from news articles, schedules reminders, and re-verifies events before they fire to catch postponements or cancellations.
 
 ## The Problem
 
-Describe the problem your project solves and who has it. One or two sentences.
+Heavy news readers encounter dozens of "this will happen on date X" mentions every week — court verdicts, product launches, earnings calls, sports rosters, movie releases — buried inside articles across AI, tech, markets, and sports. There is no easy way to track all of them without manually copying each event into a calendar.
 
 ## What It Does
 
-Describe what the AI system does and a typical interaction. What does the user provide? What does the system return?
+Forward any news article to the bot and it automatically extracts every future-dated event mentioned in the text. It stores those events in a database, sends you a confirmation listing what it found, and schedules a reminder for each event. One to two days before each event fires, a freshness-check agent searches the web and re-fetches the source to catch postponements or cancellations — sending a proactive alert if anything changed. On the event day you receive a final reminder with a one-sentence summary and a link back to the original source.
+
+**Typical interaction:**
+
+1. User forwards a news article to the bot on Telegram.
+2. Bot replies: "Found 3 events — WWDC keynote on Jun 9, Apple earnings on Jul 31, EU AI Act deadline on Aug 2. Reminders set."
+3. Two days before WWDC: "Still on track — no changes found."
+4. Day of WWDC: "Reminder: Apple WWDC keynote today (Jun 9). [source link]"
+
+**System components:** Telegram Bot API · web fetcher · LLM with structured output (Pydantic) · relational database · scheduler · freshness-check agent with web search tools.
 
 ## Setup
 
