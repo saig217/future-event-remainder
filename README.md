@@ -4,18 +4,13 @@ A Telegram bot that extracts future-dated events from news articles, schedules r
 
 ## The Problem
 
-Heavy news readers encounter dozens of "this will happen on date X" mentions every week — court verdicts, product launches, earnings calls, sports rosters, movie releases — buried inside articles across AI, tech, markets, and sports. There is no easy way to track all of them without manually copying each event into a calendar.
+Heavy news consumers — people who follow AI, tech, markets, and sports across many sources — regularly read articles that mention future-dated events (court verdicts, product launches, earnings calls, sports roster announcements, movie releases) and then forget those dates by the time they arrive. There is no tool that extracts these dates, reminds them on the day, and verifies the date hasn't shifted before firing the reminder. The initial user is me, but the pattern fits any information-heavy knowledge worker who tracks unfolding stories.
 
 ## What It Does
 
-Forward any news article to the bot and it automatically extracts every future-dated event mentioned in the text. It stores those events in a database, sends you a confirmation listing what it found, and schedules a reminder for each event. One to two days before each event fires, a freshness-check agent searches the web and re-fetches the source to catch postponements or cancellations — sending a proactive alert if anything changed. On the event day you receive a final reminder with a one-sentence summary and a link back to the original source.
+The user forwards a news article (URL or text) to a Telegram bot. Within seconds, the bot replies with a confirmation listing the future-dated events it extracted — for example, "I'll remind you about: (1) Adani SEBI verdict on May 15, 2026, (2) hearing on July 3, 2026."
 
-**Typical interaction:**
-
-1. User forwards a news article to the bot on Telegram.
-2. Bot replies: "Found 3 events — WWDC keynote on Jun 9, Apple earnings on Jul 31, EU AI Act deadline on Aug 2. Reminders set."
-3. Two days before WWDC: "Still on track — no changes found."
-4. Day of WWDC: "Reminder: Apple WWDC keynote today (Jun 9). [source link]"
+One to two days before each event, a freshness-check agent searches for recent news and decides whether the date has shifted, the event was cancelled, or it's still on track. If anything has changed, the user gets a proactive Telegram alert ("Heads up — the verdict has been postponed to June 2") and the reminder reschedules itself. On the event day the bot sends the final reminder with a one-line summary and a link back to the original source.
 
 **System components:** Telegram Bot API · web fetcher · LLM with structured output (Pydantic) · relational database · scheduler · freshness-check agent with web search tools.
 
