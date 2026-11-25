@@ -1,0 +1,393 @@
+{
+  "skill_name": "haikei",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I want to create a workspace, attach a governed GitHub connector, and let an agent call it with policy and audit. Which Haikei surface and skill should I use?",
+      "expected_output": "Routes supported workspace, group, user, policy, and connector administration to kei-cli, and agent policy/audit enforcement to the agentware SDK skill, with the boundary between them explained. Uses kei-api only for operations not exposed by the CLI.",
+      "expectations": [
+        "The response does not invent a kei CLI org or workspace command.",
+        "The response distinguishes ABAC resource management from agentware enforcement and audit."
+      ],
+      "checks": [
+        {
+          "text": "The response does not invent a kei CLI org or workspace command.",
+          "not_contains": [
+            "kei org"
+          ]
+        },
+        {
+          "contains_all": [
+            "kei-api",
+            "agentware-sdk"
+          ],
+          "text": "The response distinguishes ABAC resource management from agentware enforcement and audit."
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "A customer asks how to deploy their Kei bot runtime on Azure and then grant it access to a workspace. Give me the routing and the first source of truth to inspect for each part.",
+      "expected_output": "Routes runtime deployment to kei-cli and workspace access to kei-api, pointing to the installed CLI help/source and the API route documentation.",
+      "expectations": [
+        "The response keeps deployment and control-plane authorization as separate workstreams.",
+        "The response directs the agent to inspect actual CLI help or API routes before using commands."
+      ],
+      "checks": [
+        {
+          "contains_all": [
+            "kei-cli",
+            "kei-api"
+          ],
+          "text": "The response keeps deployment and control-plane authorization as separate workstreams."
+        },
+        {
+          "contains_all": [
+            "CLI help",
+            "API routes"
+          ],
+          "text": "The response directs the agent to inspect actual CLI help or API routes before using commands."
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "My team wants to rotate the runtime credential for our prod harness and set up audit-args encryption. Which Haikei surfaces handle each, and where does each skill live?",
+      "expected_output": "Routes credential rotation to kei-credential-rotation (kei-cli repository) and audit-args encryption to kei-audit-encryption (kei-cli repository). Explains rotation invalidates the old token immediately so a planned restart is needed.",
+      "expectations": [
+        "routes credential rotation to kei-credential-rotation and audit-args encryption to kei-audit-encryption",
+        "explains rotation invalidates the old token immediately requiring a planned restart",
+        "does not conflate the two workstreams into a single command or skill"
+      ],
+      "checks": [
+        {
+          "contains_all": [
+            "kei-credential-rotation",
+            "kei-audit-encryption"
+          ],
+          "text": "routes credential rotation to kei-credential-rotation and audit-args encryption to kei-audit-encryption"
+        },
+        {
+          "contains_all": [
+            "rotation",
+            "invalidates"
+          ],
+          "text": "explains rotation invalidates the old token immediately requiring a planned restart"
+        },
+        {
+          "not_contains": [
+            "single command",
+            "same skill"
+          ],
+          "text": "does not conflate the two workstreams into a single command or skill"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "We need to define tool schemas for our assistant and also add a new HTTP endpoint that follows Kei API conventions. Which two Haikei surfaces should I load?",
+      "expected_output": "Routes tool schemas to kei-agents and the new endpoint to kei-api-conventions. Explains kei-agents covers tool definitions and schemas, while kei-api-conventions covers AIP-style resource-oriented endpoint design.",
+      "expectations": [
+        "routes tool schemas to kei-agents and the new endpoint to kei-api-conventions",
+        "explains kei-agents covers tool definitions and schemas",
+        "explains kei-api-conventions covers AIP-style resource-oriented endpoint design"
+      ],
+      "checks": [
+        {
+          "contains_all": [
+            "kei-agents",
+            "kei-api-conventions"
+          ],
+          "text": "routes tool schemas to kei-agents and the new endpoint to kei-api-conventions"
+        },
+        {
+          "contains_all": [
+            "tool definitions",
+            "schemas"
+          ],
+          "text": "explains kei-agents covers tool definitions and schemas"
+        },
+        {
+          "contains_all": [
+            "AIP",
+            "resource-oriented"
+          ],
+          "text": "explains kei-api-conventions covers AIP-style resource-oriented endpoint design"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Our Kei installation on macOS has a stale policy bundle after a credential switch, and new tool calls are being denied. Which skill should I load to diagnose and fix this?",
+      "expected_output": "Routes to kei-setup-doctor for diagnosis (HAI-404 stale proxy cache at ~/Library/Application Support/kei-proxy) and kei-harness-setup for the full fix. Does not route to kei-cli for a non-existent doctor subcommand.",
+      "expectations": [
+        "routes to kei-setup-doctor for diagnosis and kei-harness-setup for the full fix",
+        "identifies the stale proxy cache at the macOS path (~/Library/Application Support/kei-proxy)",
+        "does not invent a kei setup doctor CLI subcommand"
+      ],
+      "checks": [
+        {
+          "contains_all": [
+            "kei-setup-doctor",
+            "kei-harness-setup"
+          ],
+          "text": "routes to kei-setup-doctor for diagnosis and kei-harness-setup for the full fix"
+        },
+        {
+          "contains_all": [
+            "Application Support",
+            "kei-proxy"
+          ],
+          "text": "identifies the stale proxy cache at the macOS path (~/Library/Application Support/kei-proxy)"
+        },
+        {
+          "contains_all": [
+            "kei-setup-doctor"
+          ],
+          "text": "does not invent a kei setup doctor CLI subcommand"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "I need to read data from a governed Linear connector and then send a message from my agent. What Haikei surface handles the connector read, and what handles the agent action?",
+      "expected_output": "Routes the governed connector read to the linear-connector skill (discovered via kei connectors list) and the agent action to agentware-sdk for tool governance. Explains the connector supplies the credential \u2014 the agent never reads or stores it.",
+      "expectations": [
+        "routes the governed connector read to the linear-connector skill",
+        "routes agent action governance to agentware-sdk",
+        "states the connector supplies the credential and the agent never reads or stores it"
+      ],
+      "checks": [
+        {
+          "contains_all": [
+            "linear-connector",
+            "kei connectors list"
+          ],
+          "text": "routes the governed connector read to the linear-connector skill"
+        },
+        {
+          "contains_all": [
+            "agentware-sdk"
+          ],
+          "text": "routes agent action governance to agentware-sdk"
+        },
+        {
+          "contains_all": [
+            "credential",
+            "agent never reads"
+          ],
+          "text": "states the connector supplies the credential and the agent never reads or stores it"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "Set up Kei's Pi integration on my workstation. Which skill covers installing the Pi adapter and what should happen to the runtime token?",
+      "expected_output": "Routes to kei-pi-setup. Install the skills and kei-lime-pi packages with Pi's Git package manager; keep KEI_RUNTIME_TOKEN in the runtime daemon and use the owner-only Unix socket.",
+      "expectations": [
+        "The response routes Pi adapter setup to kei-pi-setup.",
+        "The response names kei-lime-pi as the Pi adapter package.",
+        "The response keeps the runtime token out of Pi and uses the local socket."
+      ],
+      "checks": [
+        {
+          "text": "The response routes Pi adapter setup to kei-pi-setup.",
+          "contains_all": [
+            "kei-pi-setup"
+          ]
+        },
+        {
+          "text": "The response names kei-lime-pi as the Pi adapter package.",
+          "contains_all": [
+            "kei-lime-pi"
+          ]
+        },
+        {
+          "text": "The response keeps the runtime token out of Pi and uses the local socket.",
+          "contains_all": [
+            "token",
+            "socket"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "I want to add a remote MCP server to our Kei workspace. Which Haikei skill and command should I use? Do not execute anything \u2014 just explain in text. If you don't know something, just say so.",
+      "expected_output": "Load kei-cli. kei connectors create --template TEMPLATE_ID (custom_mcp for a custom server) --label LABEL [--mcp-url URL] --workspace W. Its tools stay blocked until an admin approves its tool manifest.",
+      "expectations": [
+        "The response routes to the kei-cli skill.",
+        "The response names kei connectors create with --template.",
+        "The response says the tools need an approved tool manifest."
+      ],
+      "checks": [
+        {
+          "text": "The response routes to the kei-cli skill.",
+          "contains_all": [
+            "kei-cli"
+          ]
+        },
+        {
+          "text": "The response names kei connectors create with --template.",
+          "contains_all": [
+            "kei connectors create",
+            "--template"
+          ]
+        },
+        {
+          "text": "The response says the tools need an approved tool manifest.",
+          "contains_any": [
+            "manifest",
+            "approve"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "prompt": "How do I approve the tools of an MCP connector in Kei? Which skill covers it? Do not execute anything \u2014 just explain in text. If you don't know something, just say so.",
+      "expected_output": "Load kei-cli. Review with kei connectors manifests show CONNECTOR_ID, then an org owner or admin runs kei connectors manifests approve CONNECTOR_ID MANIFEST_ID and confirms. tools is an alias for manifests.",
+      "expectations": [
+        "The response routes to the kei-cli skill.",
+        "The response names kei connectors manifests approve (or the tools alias).",
+        "The response says an org owner or admin approves."
+      ],
+      "checks": [
+        {
+          "text": "The response routes to the kei-cli skill.",
+          "contains_all": [
+            "kei-cli"
+          ]
+        },
+        {
+          "text": "The response names kei connectors manifests approve (or the tools alias).",
+          "regex": "kei connectors (manifests|tools) approve"
+        },
+        {
+          "text": "The response says an org owner or admin approves.",
+          "contains_any": [
+            "admin",
+            "owner"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "prompt": "I am choosing a Kei harness. List all six user-facing harness types and say when to choose each. Explain which type the API/catalog calls kind custom, give its registration command, and show the manifest sync command and minimum kei version. Do not execute anything.",
+      "expected_output": "Names SDK (Agentware), Claude Code, Codex, Pi, OpenCode, and Open WebUI, with a brief selection use for each. States API/catalog kind custom maps only to SDK (Agentware), not Pi or Open WebUI. Gives kei harness add --kind custom and kei harness sync --harness custom --manifest tools.json, with kei >= 0.1.33.",
+      "expectations": [
+        "The response names the six harness types.",
+        "The response maps kind custom to SDK (Agentware).",
+        "The response does not describe Open WebUI or Pi as custom or SDK.",
+        "The response gives the exact registration and manifest sync commands and the minimum kei version."
+      ],
+      "checks": [
+        {
+          "text": "The response names the six harness types.",
+          "contains_all": [
+            "SDK (Agentware)",
+            "Claude Code",
+            "Codex",
+            "Pi",
+            "OpenCode",
+            "Open WebUI"
+          ]
+        },
+        {
+          "text": "The response maps kind custom to SDK (Agentware).",
+          "regex": "(kind custom|custom.{0,30}(API|catalog) kind).{0,100}SDK \\(Agentware\\)|SDK \\(Agentware\\).{0,100}(kind custom|custom.{0,30}(API|catalog) kind)"
+        },
+        {
+          "text": "The response does not describe Open WebUI or Pi as custom or SDK.",
+          "not_contains": [
+            "Open WebUI is custom",
+            "Open WebUI is a custom harness",
+            "Open WebUI is an SDK",
+            "Open WebUI uses kind custom",
+            "Pi is custom",
+            "Pi is a custom harness",
+            "Pi is an SDK",
+            "Pi uses kind custom"
+          ]
+        },
+        {
+          "text": "The response gives the exact registration and manifest sync commands and the minimum kei version.",
+          "contains_all": [
+            "kei harness add --kind custom",
+            "kei harness sync --harness custom --manifest tools.json",
+            "0.1.33"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "prompt": "A user asks whether the Kei CLI can create a workspace, group, user, policy, and connector. Which surface should you route to?",
+      "expected_output": "Route supported workspace, group, user, policy, and connector administration to kei-cli and the installed kei CLI; use kei-api only for operations the CLI does not expose. Never claim these resource command groups are wholly absent.",
+      "expectations": [
+        "supported factual terms",
+        "reject stale guidance"
+      ],
+      "checks": [
+        {
+          "text": "supported factual terms",
+          "contains_all": [
+            "kei-cli",
+            "kei-api",
+            "kei groups",
+            "kei policy"
+          ]
+        },
+        {
+          "text": "reject stale guidance",
+          "not_contains": [
+            "no CLI"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "prompt": "Which Haikei skill should I load to switch the model our Kei agent uses, and does Kei fail over to a backup model on its own?",
+      "expected_output": "Load kei-model-profiles. The model an agent uses is its assigned model profile: assign another one in the console's Agents page or with kei model-profiles assign PROFILE --workspace WS --agent AGENT_ID; the harness resolves it at run time through kei-proxy (GET /v1/model-config). Automatic failover is proposed (kei#1164), not implemented.",
+      "expectations": [
+        "The response routes to the kei-model-profiles skill.",
+        "The response says switching the model means assigning a model profile.",
+        "The response says automatic failover is not implemented today."
+      ],
+      "checks": [
+        {
+          "text": "The response routes to the kei-model-profiles skill.",
+          "contains_all": [
+            "kei-model-profiles"
+          ]
+        },
+        {
+          "text": "The response says switching the model means assigning a model profile.",
+          "contains_any": [
+            "kei model-profiles assign",
+            "assign a model profile",
+            "assign another model profile",
+            "assign another profile",
+            "assign a different",
+            "model profile assign"
+          ]
+        },
+        {
+          "text": "The response says automatic failover is not implemented today.",
+          "contains_any": [
+            "not implemented",
+            "proposed",
+            "proposal",
+            "no automatic failover",
+            "no failover",
+            "no fallback",
+            "does not fail over",
+            "doesn't fail over"
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "version": 2,
+  "skills": {
+    "agentware-sdk": {
+      "source": "HaikeiLabs/skills",
+      "commit": "1d9eb3132d7507d461869a5055bf54d7b2f7bc75",
+      "sourceType": "github",
+      "skillPath": "skills/agentware-sdk/SKILL.md",
+      "computedHash": "b13586e3410b21132f343701da4796d74d69fdd45ef0c525911d60ac658e163d"
+    },
+    "haikei": {
+      "source": "HaikeiLabs/skills",
+      "commit": "1d9eb3132d7507d461869a5055bf54d7b2f7bc75",
+      "sourceType": "github",
+      "skillPath": "skills/haikei/SKILL.md",
+      "computedHash": "455e1a2bdc221dd4177e712a1b33027f8e26f196a04e40ee3dd67126dcb8924a"
+    }
+  }
+}
